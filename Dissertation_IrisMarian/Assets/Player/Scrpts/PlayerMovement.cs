@@ -4,13 +4,19 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public int enemyLayer;
+    public int friendlyLayer;
+
     private NavMeshAgent agent;
 
     public int groundLayer = 8;
     
     public float rotateSpeedMovement = 0.05f;
     private float rotateVelocity;
-    private float motionSmoothTime = 0.1f;
+    //private float motionSmoothTime = 0.1f;
+
+    public GameObject targetEnemy;
+    public float stopDistance;
 
     public GameObject moveIcon;
     public float moveIconTimerMax = 1f;
@@ -39,14 +45,8 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (hit.collider.gameObject.layer == groundLayer)
                     {
-                        //MOVEMENT
-                        agent.SetDestination(hit.point);
-                        agent.stoppingDistance = 0;
-
-                        //ROTATION
-                        Quaternion rotationToLookAt = Quaternion.LookRotation(hit.point - transform.position);
-                        float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
-
+                        moveToPosition(hit.point);
+                       
                         //MOVE iCON
                         Vector3 offset = new Vector3(hit.point.x, hit.point.y + 0.05f, hit.point.z);
                         moveIcon.SetActive(true);
@@ -55,6 +55,19 @@ public class PlayerMovement : MonoBehaviour
 
                         moveIconTimer = moveIconTimerMax;
                     }
+                    else if(hit.collider.gameObject.layer == enemyLayer)
+                    {
+                        moveToEnemy(hit.collider.gameObject);
+                    }
+                }
+            }
+
+            if(targetEnemy != null)
+            {
+                if(Vector3.Distance(transform.position, targetEnemy.transform.position) < stopDistance)
+                {
+                    agent.SetDestination(targetEnemy.transform.position);
+                    rotateToLookAt(targetEnemy.transform.position);
                 }
             }
         }
@@ -68,5 +81,33 @@ public class PlayerMovement : MonoBehaviour
                 moveIcon.SetActive(false);
             }
         }
+
+        targetEnemy = null;
+    }
+
+    public void moveToPosition(Vector3 position)
+    {
+        //MOVEMENT
+        agent.SetDestination(position);
+        agent.stoppingDistance = 0;
+
+        rotateToLookAt(position);
+    }
+
+    public void moveToEnemy(GameObject enemy)
+    {
+        targetEnemy = enemy;
+        agent.SetDestination(targetEnemy.transform.position);
+        agent.stoppingDistance = stopDistance;
+
+        rotateToLookAt(targetEnemy.transform.position);
+    }
+
+    public void rotateToLookAt(Vector3 lookAtPosition)
+    {
+        //ROTATION
+        Quaternion rotationToLookAt = Quaternion.LookRotation(lookAtPosition - transform.position);
+        float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
+
     }
 }

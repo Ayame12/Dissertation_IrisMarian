@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class PlayerAttackManager : MonoBehaviour
 {
-    public int enemyLayer;
-    public int friendlyLayer;
+    private int enemyLayer;
+    private int friendlyLayer;
 
     [Header("Ability 1")]
     public Image ability1Image;
@@ -28,6 +28,10 @@ public class PlayerAttackManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PlayerMovement pm = GetComponent<PlayerMovement>();
+        enemyLayer = pm.enemyLayer;
+        friendlyLayer = pm.friendlyLayer;
+
         ability1Image.fillAmount = 0;
         ability2Image.fillAmount = 0;
         ability3Image.fillAmount = 0;

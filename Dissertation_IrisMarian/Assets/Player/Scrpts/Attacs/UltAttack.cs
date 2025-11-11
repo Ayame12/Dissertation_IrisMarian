@@ -15,7 +15,7 @@ public class UltAttack : Ability
     private float lingerTimer;
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         base.Update();
 

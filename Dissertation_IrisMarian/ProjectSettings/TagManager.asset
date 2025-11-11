@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - BlueTower
+  - RedTower
+  - BluePlayer
+  - RedPlayer
+  - BlueMinion
+  - RedMinion
   layers:
   - Default
   - TransparentFX

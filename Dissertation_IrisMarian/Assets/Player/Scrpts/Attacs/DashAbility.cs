@@ -11,7 +11,7 @@ public class DashAbility : Ability
     private float distance;
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         base.Update();
 

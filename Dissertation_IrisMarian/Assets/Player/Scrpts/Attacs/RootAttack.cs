@@ -11,7 +11,7 @@ public class RootAttack : Ability
     
     private int targetsHit = 0;
 
-    void Update()
+    new void Update()
     {
         base.Update();
 
