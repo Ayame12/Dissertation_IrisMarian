@@ -4,12 +4,24 @@ using UnityEngine.InputSystem;
 
 public class RootAttack : Ability
 {
+    public float damage;
     public float speed = 20;
     public float range;
     public float rootDuration;
     public int targetNumber = 2;
     
     private int targetsHit = 0;
+
+    GameObject[] alreadyHitTargets = { null };
+
+    private float radius;
+
+    new void Start()
+    {
+        base.Start();
+
+        radius = GetComponent<SphereCollider>().radius;
+    }
 
     new void Update()
     {
@@ -22,11 +34,20 @@ public class RootAttack : Ability
                 gameObject.transform.Translate(0,0,speed * Time.deltaTime);
             }
 
-            //if(gameObject.GetComponent<Rigidbody>())
+            checkAndStunTargets();
 
             if (targetsHit >= targetNumber)
             {
                 isActive = false;
+
+                if (gameObject.GetComponent<MeshRenderer>())
+                {
+                    gameObject.GetComponent<MeshRenderer>().enabled = false;
+                }
+                if (gameObject.GetComponent<SphereCollider>())
+                {
+                    gameObject.GetComponent<SphereCollider>().enabled = false;
+                }
             }
 
             float distanceTraveled = Vector3.Distance(initialPosition, gameObject.transform.position);
@@ -34,6 +55,15 @@ public class RootAttack : Ability
             if (distanceTraveled > range)
             {
                 isActive = false;
+
+                if (gameObject.GetComponent<MeshRenderer>())
+                {
+                    gameObject.GetComponent<MeshRenderer>().enabled = false;
+                }
+                if (gameObject.GetComponent<SphereCollider>())
+                {
+                    gameObject.GetComponent<SphereCollider>().enabled = false;
+                }
             }
         }
     }
@@ -55,5 +85,29 @@ public class RootAttack : Ability
         gameObject.SetActive(true);
         gameObject.transform.position = initialPosition;
         gameObject.transform.rotation = Quaternion.Euler(0, rot, 0);
+    }
+
+    private void checkAndStunTargets()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject != gameObject && collider.gameObject != alreadyHitTargets[0])
+            {
+                if (collider.gameObject.layer == enemyLayer && collider.gameObject.tag != enemyTowerTag)
+                {
+                    if (collider.gameObject.GetComponent<Stats>())
+                    {
+                        collider.gameObject.GetComponent<Stats>().takeDamage(damage);
+                        collider.gameObject.GetComponent<Stats>().applyStun(rootDuration);
+
+                        alreadyHitTargets[0] = collider.gameObject;
+
+                        targetsHit++;
+                    }
+                }
+            }
+        }
     }
 }

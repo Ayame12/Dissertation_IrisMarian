@@ -26,6 +26,7 @@ public class MinionScript : MonoBehaviour
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent.speed = GetComponent<Stats>().speed;
         findAndSetTarget();
 
         targetSwitchTimer = targetSwitchInterval;
@@ -34,6 +35,8 @@ public class MinionScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        agent.speed = GetComponent<Stats>().currentSpeed;
+
         targetSwitchTimer -= Time.deltaTime;
 
         if(targetSwitchTimer <= 0)

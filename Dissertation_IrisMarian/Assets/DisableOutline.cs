@@ -9,7 +9,7 @@ public class DisableOutline : MonoBehaviour
     void Start()
     {
         outline = GetComponent<Outline>();
-        Invoke("DisableOutline", delay);
+        Invoke("disableOutline", delay);
     }
 
     private void disableOutline()

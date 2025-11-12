@@ -7,6 +7,12 @@ public class Ability : MonoBehaviour
 {
     public GameObject player;
 
+    public int enemyLayer;
+    public int friendlyLayer;
+    public string enemyTowerTag;
+    public string enemyPlayerTag;
+    public string enemyMinionTag;
+
     public float cooldown = 5;
     //[HideInInspector]
     public float cooldownTimer = 0;
@@ -23,8 +29,18 @@ public class Ability : MonoBehaviour
     //public float rot;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
+        PlayerMovement pm = player.GetComponent<PlayerMovement>();
+
+        enemyLayer = pm.enemyLayer;
+        friendlyLayer = pm.friendlyLayer;
+
+        Stats stats = player.GetComponent<Stats>();
+
+        enemyMinionTag = stats.enemyMinionTag;
+        enemyPlayerTag = stats.enemyPlayerTag;
+        enemyTowerTag = stats.enemyTowerTag;
     }
 
     public void Update()
@@ -40,10 +56,17 @@ public class Ability : MonoBehaviour
             cooldownTimer = 0;
         }
 
-        if(!isActive && gameObject.GetComponent<MeshRenderer>())
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
+        //if(!isActive)
+        //{
+        //    if(gameObject.GetComponent<MeshRenderer>())
+        //    {
+        //        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        //    }
+        //    if(gameObject.GetComponent<SphereCollider>())
+        //    {
+        //        gameObject.GetComponent<SphereCollider>().enabled = false;
+        //    }
+        //}
     }
 
     // Update is called once per frame

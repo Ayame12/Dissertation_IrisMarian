@@ -1,9 +1,17 @@
+using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
     public float health;
+    public float damage;
+    public float speed;
+    public float currentSpeed;
+
+    public string enemyTowerTag;
+    public string enemyPlayerTag;
+    public string enemyMinionTag;
 
     public float damageLerpDuration;
     private float currentHealth;
@@ -12,16 +20,47 @@ public class Stats : MonoBehaviour
 
     HealthUI healthUI;
 
+    public bool isStunned;
+    public float stunTimer = 0;
+
+    public bool isSlowed;
+    public float slowTimer = 0;
+    public float slowPercentage;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        currentSpeed = speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(slowTimer > 0)
+        {
+            slowTimer -= Time.deltaTime;
+            if(slowTimer == 0)
+            {
+                removeSlow();
+            }
+        }
+        else if(slowTimer < 0)
+        {
+            removeSlow();
+        }
+
+        if (stunTimer > 0)
+        {
+            stunTimer -= Time.deltaTime;
+            if (stunTimer == 0)
+            {
+                removeStun();
+            }
+        }
+        else if (stunTimer < 0)
+        {
+            removeStun();
+        }
     }
 
     private void Awake()
@@ -45,6 +84,52 @@ public class Stats : MonoBehaviour
         else
         {
             startLerpHealth();
+        }
+    }
+
+    public void applySlow(float slow, float slowDuration = 0)
+    {
+        if(!isStunned)
+        {
+            currentSpeed = speed * slow;
+        }
+        
+        isSlowed = true;
+        slowTimer = slowDuration;
+        slowPercentage = slow;
+    }
+
+    public void applyStun(float stunDuration)
+    {
+        isStunned = true;
+        stunTimer = stunDuration;
+        currentSpeed = 0;
+    }
+
+    public void removeSlow()
+    {
+        isSlowed = false;
+        slowTimer = 0;
+        slowPercentage = 0;
+
+        if(!isStunned)
+        {
+            currentSpeed = speed;
+        }
+    }
+
+    public void removeStun()
+    {
+        isStunned = false;
+        stunTimer = 0;
+
+        if(isSlowed)
+        {
+            currentSpeed = speed * slowPercentage;
+        }
+        else
+        {
+            currentSpeed = speed;
         }
     }
 

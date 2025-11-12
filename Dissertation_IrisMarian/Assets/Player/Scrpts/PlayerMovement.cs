@@ -4,6 +4,12 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject basicAttackPrefab;
+    public float basicAttackCastDuration;
+    public float basicAttackCooldown;
+
+    private float basicAttackCooldownTimer;
+
     public int enemyLayer;
     public int friendlyLayer;
 
@@ -18,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject targetEnemy;
     public float stopDistance;
 
+    //private HighLightManager hmScript;
+
     public GameObject moveIcon;
     public float moveIconTimerMax = 1f;
     private float moveIconTimer;
@@ -28,16 +36,25 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
+
+        agent.speed = GetComponent<Stats>().speed;
+
+        //hmScript = GetComponent<HighLightManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //float speed = agent.velocity.magnitude / agent.speed;
-        
-        if(hasControl)
+        agent.speed = GetComponent<Stats>().currentSpeed;
+
+        if(basicAttackCooldownTimer > 0)
         {
-            if (Input.GetMouseButton((int)MouseButton.Right))
+            basicAttackCooldownTimer -= Time.deltaTime;
+        }
+
+        if (hasControl)
+        {
+            if (Input.GetMouseButton(1))
             {
                 RaycastHit hit;
 
@@ -57,18 +74,32 @@ public class PlayerMovement : MonoBehaviour
                     }
                     else if(hit.collider.gameObject.layer == enemyLayer)
                     {
-                        moveToEnemy(hit.collider.gameObject);
+                        if (hit.transform.parent)
+                        {
+                            targetEnemy = hit.transform.parent.gameObject;
+                        }
+                        else if(hit.collider.gameObject != null)
+                        {
+                            targetEnemy = hit.transform.gameObject;
+                        }
+
+                        moveToEnemy(targetEnemy);
                     }
                 }
             }
 
             if(targetEnemy != null)
-            {
-                if(Vector3.Distance(transform.position, targetEnemy.transform.position) < stopDistance)
+            { float dis = Vector3.Distance(transform.position, targetEnemy.transform.position);
+                if (dis < stopDistance + 1.5f)
+                {
+                    castBasicAttack();
+                    agent.SetDestination(transform.position);
+                }
+                else
                 {
                     agent.SetDestination(targetEnemy.transform.position);
-                    rotateToLookAt(targetEnemy.transform.position);
                 }
+                
             }
         }
 
@@ -80,9 +111,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 moveIcon.SetActive(false);
             }
-        }
-
-        targetEnemy = null;
+        }        
     }
 
     public void moveToPosition(Vector3 position)
@@ -92,15 +121,23 @@ public class PlayerMovement : MonoBehaviour
         agent.stoppingDistance = 0;
 
         rotateToLookAt(position);
+
+        if(targetEnemy != null)
+        {
+            //hmScript.deselectHighlight();
+            targetEnemy = null;
+        }
+        
     }
 
     public void moveToEnemy(GameObject enemy)
     {
-        targetEnemy = enemy;
         agent.SetDestination(targetEnemy.transform.position);
         agent.stoppingDistance = stopDistance;
 
         rotateToLookAt(targetEnemy.transform.position);
+
+        //hmScript.selectedHighlight(enemy);
     }
 
     public void rotateToLookAt(Vector3 lookAtPosition)
@@ -109,5 +146,19 @@ public class PlayerMovement : MonoBehaviour
         Quaternion rotationToLookAt = Quaternion.LookRotation(lookAtPosition - transform.position);
         float rotationY = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationToLookAt.eulerAngles.y, ref rotateVelocity, rotateSpeedMovement * (Time.deltaTime * 5));
 
+    }
+
+    public void castBasicAttack()
+    {
+        if(basicAttackCooldownTimer <= 0)
+        {
+            Stats stats = GetComponent<Stats>();
+            stats.applyStun(basicAttackCastDuration);
+
+            basicAttackCooldownTimer = basicAttackCooldown;
+
+            GameObject projectile = Instantiate(basicAttackPrefab, transform.position, Quaternion.identity);
+            projectile.GetComponent<MinionProjectile>().setTarget(targetEnemy, stats.damage);
+        }
     }
 }

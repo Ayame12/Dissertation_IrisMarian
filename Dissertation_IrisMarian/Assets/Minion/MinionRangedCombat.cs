@@ -6,7 +6,7 @@ public class MinionRangedCombat : MonoBehaviour
     public Transform projectileSpawnPoint;
 
     private float attackRange = 10;
-    public float attackDamage = 10;
+    private float attackDamage = 10;
     public float attackCooldown = 1;
 
     private float attackTimer;
@@ -22,6 +22,7 @@ public class MinionRangedCombat : MonoBehaviour
         minionScript = GetComponent<MinionScript>();
 
         attackRange = minionScript.stopDistange;
+        attackDamage = stats.damage;
     }
 
     // Update is called once per frame
