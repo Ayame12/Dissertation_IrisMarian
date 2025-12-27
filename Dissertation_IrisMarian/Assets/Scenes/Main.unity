@@ -588,9 +588,6 @@ MonoBehaviour:
   damage: 0
   speed: 0
   currentSpeed: 0
-  enemyTowerTag: 
-  enemyPlayerTag: 
-  enemyMinionTag: 
   damageLerpDuration: 0.25
   isStunned: 0
   stunTimer: 0
@@ -3743,9 +3740,6 @@ MonoBehaviour:
   damage: 0
   speed: 0
   currentSpeed: 0
-  enemyTowerTag: 
-  enemyPlayerTag: 
-  enemyMinionTag: 
   damageLerpDuration: 0.25
   isStunned: 0
   stunTimer: 0
@@ -6359,10 +6353,12 @@ GameObject:
   - component: {fileID: 1888430122}
   - component: {fileID: 1888430121}
   - component: {fileID: 1888430126}
-  - component: {fileID: 1888430125}
-  - component: {fileID: 1888430127}
+  - component: {fileID: 1888430132}
   - component: {fileID: 1888430129}
   - component: {fileID: 1888430128}
+  - component: {fileID: 1888430131}
+  - component: {fileID: 1888430125}
+  - component: {fileID: 1888430127}
   - component: {fileID: 1888430130}
   m_Layer: 9
   m_Name: Player
@@ -6481,12 +6477,9 @@ MonoBehaviour:
   basicAttackPrefab: {fileID: 3927786250547700299, guid: 5af0e0fda47cb3e4e809e2524ddb0814, type: 3}
   basicAttackCastDuration: 0.2
   basicAttackCooldown: 1
-  enemyLayer: 10
-  friendlyLayer: 9
-  groundLayer: 8
   rotateSpeedMovement: 0.05
-  targetEnemy: {fileID: 0}
   stopDistance: 5
+  targetEnemy: {fileID: 0}
   moveIcon: {fileID: 1150250298}
   moveIconTimerMax: 0.5
   hasControl: 1
@@ -6526,15 +6519,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackManager
   ability1Image: {fileID: 1095590800}
   ability1Text: {fileID: 1517813496}
-  ability1Key: 113
   ability1: {fileID: 1908009317}
   ability2Image: {fileID: 1918709651}
   ability2Text: {fileID: 2077783348}
-  ability2Key: 119
   ability2: {fileID: 734184454}
   ability3Image: {fileID: 192958851}
   ability3Text: {fileID: 1524153405}
-  ability3Key: 101
   ability3: {fileID: 489638232}
 --- !u!114 &1888430128
 MonoBehaviour:
@@ -6565,9 +6555,6 @@ MonoBehaviour:
   damage: 40
   speed: 5
   currentSpeed: 0
-  enemyTowerTag: RedTower
-  enemyPlayerTag: RedPlayer
-  enemyMinionTag: RedMinion
   damageLerpDuration: 0.25
   isStunned: 0
   stunTimer: 0
@@ -6589,6 +6576,48 @@ MonoBehaviour:
   selectableLayer:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!114 &1888430131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888430120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c99e5bf3898334fad59298a4c869c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+  ability1Key: 113
+  ability2Key: 119
+  ability3Key: 101
+  move: 0
+  basicAttack: 0
+  ability1: 0
+  ability2: 0
+  ability3: 0
+  mousePos: {x: 0, y: 0, z: 0}
+  targetEnemy: {fileID: 0}
+  isAI: 0
+--- !u!114 &1888430132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888430120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2be0773fb5cc9ea43a84126496909244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
+  isAI: 0
+  groundLayer: 8
+  enemyLayer: 10
+  friendlyLayer: 9
+  enemyTowerTag: RedTower
+  enemyMinionTag: RedMinion
+  enemyPlayerTag: RedPlayer
 --- !u!1 &1908009316
 GameObject:
   m_ObjectHideFlags: 0

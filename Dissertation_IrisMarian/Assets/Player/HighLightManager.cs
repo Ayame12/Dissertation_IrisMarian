@@ -13,13 +13,13 @@ public class HighLightManager : MonoBehaviour
     private Outline highlightOutline;
     private RaycastHit hit;
 
-    private PlayerMovement playerMove;
+    private PlayerScript playerScript;
 
     void Start()
     {
-        playerMove = GetComponent<PlayerMovement>();
-        enemyLayer = playerMove.enemyLayer;
-        friendlyLayer = playerMove.friendlyLayer;
+        playerScript = GetComponent<PlayerScript>();
+        enemyLayer = playerScript.enemyLayer;
+        friendlyLayer = playerScript.friendlyLayer;
     }
 
     // Update is called once per frame

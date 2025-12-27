@@ -7,6 +7,8 @@ public class Ability : MonoBehaviour
 {
     public GameObject player;
 
+    PlayerScript playerScript;
+
     public int enemyLayer;
     public int friendlyLayer;
     public string enemyTowerTag;
@@ -14,33 +16,25 @@ public class Ability : MonoBehaviour
     public string enemyMinionTag;
 
     public float cooldown = 5;
-    //[HideInInspector]
     public float cooldownTimer = 0;
     [HideInInspector]
     public bool isAvailable = true;
     protected bool isActive = false;
 
     protected Vector3 initialPosition;
-    //[HideInInspector]
     protected Vector3 targetPosition;
-    //[HideInInspector]
-    //public Vector3 direction;
-    //[HideInInspector]
-    //public float rot;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
     {
-        PlayerMovement pm = player.GetComponent<PlayerMovement>();
+        playerScript = player.GetComponent<PlayerScript>();
 
-        enemyLayer = pm.enemyLayer;
-        friendlyLayer = pm.friendlyLayer;
+        enemyLayer = playerScript.enemyLayer;
+        friendlyLayer = playerScript.friendlyLayer;
 
-        Stats stats = player.GetComponent<Stats>();
-
-        enemyMinionTag = stats.enemyMinionTag;
-        enemyPlayerTag = stats.enemyPlayerTag;
-        enemyTowerTag = stats.enemyTowerTag;
+        enemyMinionTag = playerScript.enemyMinionTag;
+        enemyPlayerTag = playerScript.enemyPlayerTag;
+        enemyTowerTag = playerScript.enemyTowerTag;
     }
 
     public void Update()

@@ -7,23 +7,20 @@ public class PlayerMovement : MonoBehaviour
     public GameObject basicAttackPrefab;
     public float basicAttackCastDuration;
     public float basicAttackCooldown;
-
     private float basicAttackCooldownTimer;
 
-    public int enemyLayer;
-    public int friendlyLayer;
-
+    //private int groundLayer = 8;
+    //private int enemyLayer;
+   // private int friendlyLayer;
     private NavMeshAgent agent;
-
-    public int groundLayer = 8;
     
     public float rotateSpeedMovement = 0.05f;
     private float rotateVelocity;
     //private float motionSmoothTime = 0.1f;
-
-    public GameObject targetEnemy;
     public float stopDistance;
 
+    public GameObject targetEnemy;
+    
     //private HighLightManager hmScript;
 
     public GameObject moveIcon;
@@ -32,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool hasControl = true;
 
+    private PlayerInput playerInput;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,11 +38,16 @@ public class PlayerMovement : MonoBehaviour
 
         agent.speed = GetComponent<Stats>().speed;
 
-        //hmScript = GetComponent<HighLightManager>();
+        playerInput = gameObject.GetComponent<PlayerInput>();
+
+        //PlayerScript playerScript = GetComponent<PlayerScript>();
+        //groundLayer = playerScript.groundLayer;
+        //enemyLayer = playerScript.enemyLayer;
+        //friendlyLayer = playerScript.friendlyLayer;
     }
 
     // Update is called once per frame
-    void Update()
+    public void frameUpdate()
     {
         agent.speed = GetComponent<Stats>().currentSpeed;
 
@@ -54,39 +58,32 @@ public class PlayerMovement : MonoBehaviour
 
         if (hasControl)
         {
-            if (Input.GetMouseButton(1))
-            {
-                RaycastHit hit;
+            //if (Input.GetMouseButton(1))
+            //{
+                //RaycastHit hit;
 
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
-                {
-                    if (hit.collider.gameObject.layer == groundLayer)
+                //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+                //{
+                    if (playerInput.move)
                     {
-                        moveToPosition(hit.point);
+                        moveToPosition(playerInput.mousePos);
                        
-                        //MOVE iCON
-                        Vector3 offset = new Vector3(hit.point.x, hit.point.y + 0.05f, hit.point.z);
+                        //move icon
+                        Vector3 offset = new Vector3(playerInput.mousePos.x, playerInput.mousePos.y + 0.05f, playerInput.mousePos.z);
                         moveIcon.SetActive(true);
                         moveIcon.transform.position = offset;
                         //moveIcon.GetComponent<Animator>().Play("MoveIconAnim", -1, 0f);
 
                         moveIconTimer = moveIconTimerMax;
                     }
-                    else if(hit.collider.gameObject.layer == enemyLayer)
+                    if(playerInput.basicAttack)
                     {
-                        if (hit.transform.parent)
-                        {
-                            targetEnemy = hit.transform.parent.gameObject;
-                        }
-                        else if(hit.collider.gameObject != null)
-                        {
-                            targetEnemy = hit.transform.gameObject;
-                        }
+                        targetEnemy = playerInput.targetEnemy;
 
                         moveToEnemy(targetEnemy);
                     }
-                }
-            }
+                //}
+            //}
 
             if(targetEnemy != null)
             { float dis = Vector3.Distance(transform.position, targetEnemy.transform.position);

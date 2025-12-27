@@ -9,10 +9,6 @@ public class Stats : MonoBehaviour
     public float speed;
     public float currentSpeed;
 
-    public string enemyTowerTag;
-    public string enemyPlayerTag;
-    public string enemyMinionTag;
-
     public float damageLerpDuration;
     private float currentHealth;
     private float targetHealth;

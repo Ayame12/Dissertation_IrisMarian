@@ -7,30 +7,35 @@ public class PlayerAttackManager : MonoBehaviour
     private int enemyLayer;
     private int friendlyLayer;
 
+    PlayerInput playerInput;
+    PlayerScript playerScript;
+
     [Header("Ability 1")]
     public Image ability1Image;
     public Text ability1Text;
-    public KeyCode ability1Key;
+    private KeyCode ability1Key;
     public Ability ability1;
 
     [Header("Ability 2")]
     public Image ability2Image;
     public Text ability2Text;
-    public KeyCode ability2Key;
+    private KeyCode ability2Key;
     public Ability ability2;
 
     [Header("Ability 3")]
     public Image ability3Image;
     public Text ability3Text;
-    public KeyCode ability3Key;
+    private KeyCode ability3Key;
     public Ability ability3;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        PlayerMovement pm = GetComponent<PlayerMovement>();
-        enemyLayer = pm.enemyLayer;
-        friendlyLayer = pm.friendlyLayer;
+        playerScript = GetComponent<PlayerScript>();
+        enemyLayer = playerScript.enemyLayer;
+        friendlyLayer = playerScript.friendlyLayer;
+
+        playerInput = GetComponent<PlayerInput>();
 
         ability1Image.fillAmount = 0;
         ability2Image.fillAmount = 0;
@@ -40,25 +45,30 @@ public class PlayerAttackManager : MonoBehaviour
         ability2Text.text = "";
         ability3Text.text = "";
 
+
+        ability1Key = playerInput.ability1Key;
+        ability2Key = playerInput.ability2Key;
+        ability3Key = playerInput.ability3Key;
+
         ability1.initialize(gameObject);
         ability2.initialize(gameObject);
         ability3.initialize(gameObject);
     }
 
     // Update is called once per frame
-    void Update()
+    public void frameUpdate()
     {
-        if (Input.GetKeyDown(ability1Key) && ability1.isAvailable)
+        if (playerInput.ability1 && ability1.isAvailable)
         {
             ability1.action();
         }
 
-        if (Input.GetKeyDown(ability2Key) && ability2.isAvailable)
+        if (playerInput.ability2 && ability2.isAvailable)
         {
             ability2.action();
         }
 
-        if (Input.GetKeyDown(ability3Key) && ability3.isAvailable)
+        if (playerInput.ability3 && ability3.isAvailable)
         {
             ability3.action();
         }
