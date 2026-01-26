@@ -115,11 +115,18 @@ public class MinionScript : MonoBehaviour
             else
             {
                 GameObject enemyPlayer = GameObject.FindGameObjectWithTag(enemyPlayerTag);
-                float distanceToPlayer = Vector3.Distance(gameObject.transform.position, enemyPlayer.transform.position);
-
-                if (distanceToPlayer < aggroDistance)
+                if(enemyPlayer != null)
                 {
-                    currentTarget = enemyPlayer;
+                    float distanceToPlayer = Vector3.Distance(gameObject.transform.position, enemyPlayer.transform.position);
+
+                    if (distanceToPlayer < aggroDistance)
+                    {
+                        currentTarget = enemyPlayer;
+                    }
+                    else
+                    {
+                        currentTarget = enemyTower;
+                    }
                 }
                 else
                 {

@@ -50,7 +50,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //if AI, do AI update here
         //if (isLocal)

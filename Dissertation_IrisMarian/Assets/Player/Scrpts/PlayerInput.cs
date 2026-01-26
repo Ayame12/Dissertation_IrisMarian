@@ -25,6 +25,8 @@ public class PlayerInput : MonoBehaviour
 
     public bool isAI = false;
 
+    private Camera cam;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,7 +37,18 @@ public class PlayerInput : MonoBehaviour
         groundLayer = playerScript.groundLayer;
         enemyLayer = playerScript.enemyLayer;
         friendlyLayer = playerScript.friendlyLayer;
+
+        cam = Camera.main;
     }
+
+    //bool IsOnScreen(Camera cam, Vector3 worldPos)
+    //{
+    //    Vector3 p = cam.WorldToScreenPoint(worldPos);
+
+    //    return p.z > 0 &&
+    //           p.x >= 0 && p.x <= Screen.width &&
+    //           p.y >= 0 && p.y <= Screen.height;
+    //}
 
     // Update is called once per frame
     public void frameUpdate()
@@ -67,7 +80,7 @@ public class PlayerInput : MonoBehaviour
             {
                 RaycastHit hit;
 
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+                if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
                 {
                     if (hit.collider.gameObject.layer == groundLayer)
                     {

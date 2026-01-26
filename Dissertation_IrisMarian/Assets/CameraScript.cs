@@ -9,7 +9,7 @@ public class CameraScript : MonoBehaviour
     private bool usingCineCam = true;
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if(Input.GetKeyDown(KeyCode.Y))
         {
