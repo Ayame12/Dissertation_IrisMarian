@@ -1,7 +1,4 @@
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.AI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Ability : MonoBehaviour
 {

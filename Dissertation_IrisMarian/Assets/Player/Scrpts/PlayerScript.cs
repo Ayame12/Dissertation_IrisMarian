@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Android;
 
 public class PlayerScript : MonoBehaviour
 {

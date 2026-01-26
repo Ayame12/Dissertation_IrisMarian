@@ -39,6 +39,8 @@ public class PlayerInput : MonoBehaviour
         friendlyLayer = playerScript.friendlyLayer;
 
         cam = Camera.main;
+
+        mousePos = new Vector3(0, 0, 0);
     }
 
     //bool IsOnScreen(Camera cam, Vector3 worldPos)
@@ -53,7 +55,7 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     public void frameUpdate()
     {
-        if(move)
+        if (move)
         {
             move = false;
         }
@@ -76,11 +78,21 @@ public class PlayerInput : MonoBehaviour
 
         if(!isAI)
         {
+
+            if (!Application.isFocused)
+                return;
+
+            Vector3 newMousePos = Input.mousePosition;
+
+            if (newMousePos.x < 0 || newMousePos.y < 0 ||
+                newMousePos.x > Screen.width || newMousePos.y > Screen.height)
+                return;
+
             if (Input.GetMouseButton(1))
             {
                 RaycastHit hit;
 
-                if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
+                if (Physics.Raycast(cam.ScreenPointToRay(newMousePos), out hit, Mathf.Infinity))
                 {
                     if (hit.collider.gameObject.layer == groundLayer)
                     {

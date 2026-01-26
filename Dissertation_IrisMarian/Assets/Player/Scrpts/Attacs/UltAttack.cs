@@ -1,7 +1,4 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class UltAttack : Ability
 {
