@@ -48,7 +48,7 @@ public class TowerProjectileScript : MonoBehaviour
 
             if(target.GetComponent<Stats>())
             {
-                target.GetComponent<Stats>().takeDamage(damage);
+                target.GetComponent<Stats>().takeDamage(damage,3);
             }
         }
     }

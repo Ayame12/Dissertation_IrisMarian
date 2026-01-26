@@ -6,6 +6,8 @@ public class MinionProjectile : MonoBehaviour
     private float damage;
     public float speed;
 
+    public int damageType;
+
     // Update is called once per frame
     void Update()
     {
@@ -37,7 +39,7 @@ public class MinionProjectile : MonoBehaviour
     {
         if(target.GetComponent<Stats>())
         {
-            target.GetComponent<Stats>().takeDamage(damage);
+            target.GetComponent<Stats>().takeDamage(damage, damageType);
         }
     }
 }

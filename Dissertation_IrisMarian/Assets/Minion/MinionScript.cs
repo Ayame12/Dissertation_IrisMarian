@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,6 +13,7 @@ public class MinionScript : MonoBehaviour
     public int enemyLayer;
     public int allyLayer;
 
+    //public string friendlyPlayerTag;
     public string enemyTowerTag;
     public string enemyMinionTag;
     public string enemyPlayerTag;
@@ -20,7 +22,10 @@ public class MinionScript : MonoBehaviour
     public float aggroDistance;
     public float targetSwitchInterval;
 
-    private float targetSwitchTimer;
+    public float targetSwitchTimer;
+
+    public float CSTimerThreshhold;
+    private float timerSincePlayerDamage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,27 +34,53 @@ public class MinionScript : MonoBehaviour
         agent.speed = GetComponent<Stats>().speed;
         findAndSetTarget();
 
-        targetSwitchTimer = targetSwitchInterval;
+        targetSwitchTimer = 0;
     }
 
     // Update is called once per frame
+    //void Update()
+    //{
+    //    agent.speed = GetComponent<Stats>().currentSpeed;
+
+
+    //    if(currentTarget == null)
+    //    {
+    //        findAndSetTarget();
+    //    }
+
+    //    if(currentTarget != null)
+    //    {
+    //        Vector3 directionToTarget = currentTarget.transform.position - gameObject.transform.position;
+    //        Vector3 stoppingPosition = currentTarget.transform.position - directionToTarget.normalized * stopDistange;
+
+    //        agent.SetDestination(stoppingPosition);
+
+    //        faceTarget();
+    //    }
+    //}
+
     void Update()
     {
         agent.speed = GetComponent<Stats>().currentSpeed;
 
         targetSwitchTimer -= Time.deltaTime;
 
-        if(targetSwitchTimer <= 0)
+        if (targetSwitchTimer <= 0 || currentTarget == null)
         {
             findAndSetTarget();
         }
 
-        if(currentTarget != null)
+        if (currentTarget != null)
         {
-            Vector3 directionToTarget = currentTarget.transform.position - gameObject.transform.position;
-            Vector3 stoppingPosition = currentTarget.transform.position - directionToTarget.normalized * stopDistange;
+            float distanceToTarget = Vector3.Distance(gameObject.transform.position, currentTarget.transform.position);
 
-            agent.SetDestination(stoppingPosition);
+            if(distanceToTarget > stopDistange)
+            {
+                Vector3 directionToTarget = currentTarget.transform.position - gameObject.transform.position;
+                Vector3 stoppingPosition = currentTarget.transform.position - directionToTarget.normalized * stopDistange;
+
+                agent.SetDestination(stoppingPosition);
+            }
 
             faceTarget();
         }
@@ -66,10 +97,7 @@ public class MinionScript : MonoBehaviour
     {
         GameObject[] enemyMinions = GameObject.FindGameObjectsWithTag(enemyMinionTag);
 
-        //enemyList.Add(GameObject.FindGameObjectWithTag(enemyPlayerTag));
-        //enemyList.Add(GameObject.FindGameObjectWithTag(enemyTowerTag));
-
-        GameObject closestEnemyMinion = getClosestObjectInRadius(enemyMinions, aggroDistance);
+        GameObject closestEnemyMinion = getClosestObjectInRadius(enemyMinions);
 
         if(closestEnemyMinion != null)
         {
@@ -77,11 +105,31 @@ public class MinionScript : MonoBehaviour
         }
         else
         {
-            currentTarget = GameObject.FindGameObjectWithTag(enemyTowerTag);
+            GameObject enemyTower = GameObject.FindGameObjectWithTag(enemyTowerTag);
+            float distanceToTower = Vector3.Distance(gameObject.transform.position, enemyTower.transform.position);
+
+            if(distanceToTower < aggroDistance)
+            {
+                currentTarget = enemyTower;
+            }
+            else
+            {
+                GameObject enemyPlayer = GameObject.FindGameObjectWithTag(enemyPlayerTag);
+                float distanceToPlayer = Vector3.Distance(gameObject.transform.position, enemyPlayer.transform.position);
+
+                if (distanceToPlayer < aggroDistance)
+                {
+                    currentTarget = enemyPlayer;
+                }
+                else
+                {
+                    currentTarget = enemyTower;
+                }
+            }
         }
     }
 
-    private GameObject getClosestObjectInRadius(GameObject[] objects, float radius)
+    private GameObject getClosestObjectInRadius(GameObject[] objects)
     {
         float closestDistance = Mathf.Infinity;
         GameObject closestEnemy = null;
@@ -90,7 +138,7 @@ public class MinionScript : MonoBehaviour
         {
             float distance = Vector3.Distance(gameObject.transform.position, obj.transform.position);
 
-            if(distance < closestDistance)
+            if(distance < closestDistance && distance < aggroDistance)
             {
                 closestDistance = distance;
                 closestEnemy = obj;

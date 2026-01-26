@@ -15,11 +15,17 @@ public class MinionRangedCombat : MonoBehaviour
     private Stats stats;
     private MinionScript minionScript;
 
+    private float targetSwitchTimer;
+    private float targetSwitchInterval;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         stats = GetComponent<Stats>();
         minionScript = GetComponent<MinionScript>();
+
+        targetSwitchTimer = minionScript.targetSwitchTimer;
+        targetSwitchInterval = minionScript.targetSwitchInterval;
 
         attackRange = minionScript.stopDistange;
         attackDamage = stats.damage;
@@ -62,5 +68,6 @@ public class MinionRangedCombat : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
         projectile.GetComponent<MinionProjectile>().setTarget(minionScript.currentTarget, attackDamage);
 
+        targetSwitchTimer = targetSwitchInterval;
     }
 }

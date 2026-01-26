@@ -156,6 +156,11 @@ public class PlayerMovement : MonoBehaviour
 
             GameObject projectile = Instantiate(basicAttackPrefab, transform.position, Quaternion.identity);
             projectile.GetComponent<MinionProjectile>().setTarget(targetEnemy, stats.damage);
+
+            //if(targetEnemy.GetComponent<PlayerScript>() != null)
+            //{
+            //    gameObject.GetComponent<PlayerScript>().aggroAllInRange();
+            //}
         }
     }
 }

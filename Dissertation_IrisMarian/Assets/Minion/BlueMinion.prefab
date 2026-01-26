@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.68729734, b: 0.9811321, a: 1}
+  m_Color: {r: 0.25787643, g: 0.4013654, b: 0.8962264, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -694,8 +694,10 @@ MonoBehaviour:
   enemyMinionTag: RedMinion
   enemyPlayerTag: RedPlayer
   stopDistange: 5
-  aggroDistance: 10
-  targetSwitchInterval: 0.2
+  aggroDistance: 8
+  targetSwitchInterval: 4
+  targetSwitchTimer: 0
+  CSTimerThreshhold: 0.2
 --- !u!114 &7408534624050285754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,9 +714,6 @@ MonoBehaviour:
   damage: 20
   speed: 3.5
   currentSpeed: 0
-  enemyTowerTag: 
-  enemyPlayerTag: 
-  enemyMinionTag: 
   damageLerpDuration: 0.25
   isStunned: 0
   stunTimer: 0
@@ -748,7 +747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinionRangedCombat
   projectilePrefab: {fileID: 3927786250547700299, guid: 5af0e0fda47cb3e4e809e2524ddb0814, type: 3}
   projectileSpawnPoint: {fileID: 3254652308948920480}
-  attackCooldown: 1
+  attackCooldown: 2
 --- !u!114 &3192653536213584949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,7 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 1
-  outlineColor: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2.5
   precomputeOutline: 1
   bakeKeys:

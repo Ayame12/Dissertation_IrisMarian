@@ -11,12 +11,12 @@ public class TowerScript : MonoBehaviour
     public int enemyLayer;
     public int allyLayer;
 
-    public string enemyTowerTag;
+    public GameObject enemyPlayer;
+
     public string enemyMinionTag;
-    public string enemyPlayerTag;
 
     private float attackTimer;
-    private GameObject currentTarget;
+    public GameObject currentTarget;
 
     // Update is called once per frame
     void Update()
@@ -48,15 +48,22 @@ public class TowerScript : MonoBehaviour
     {
         GameObject[] enemyMinions = GameObject.FindGameObjectsWithTag(enemyMinionTag);
 
-        //enemyList.Add(GameObject.FindGameObjectWithTag(enemyPlayerTag));
-        //enemyList.Add(GameObject.FindGameObjectWithTag(enemyTowerTag));
-
         GameObject closestEnemyMinion = getClosestObjectInRadius(enemyMinions, range);
 
         if (closestEnemyMinion != null)
         {
             currentTarget = closestEnemyMinion;
             attackTimer = cooldown;
+        }
+        else
+        {
+            float distance = Vector3.Distance(gameObject.transform.position, enemyPlayer.transform.position);
+
+            if (distance <= range)
+            {
+                currentTarget = enemyPlayer;
+                attackTimer = cooldown;
+            }
         }
     }
 

@@ -69,12 +69,34 @@ public class Stats : MonoBehaviour
 
     }
 
-    public void takeDamage(float damage)
+    public void takeDamage(float damage, int damageType)
     {
         targetHealth -= damage;
 
+        if (damageType == 1)
+        {
+            if (GetComponent<PlayerScript>())
+            {
+                GetComponent<PlayerScript>().enemyPlayer.GetComponent<PlayerScript>().aggroAllInRange();
+            }
+            else if (GetComponent<MinionScript>())
+            {
+                MinionScript minion = GetComponent<MinionScript>();
+                minion.targetSwitchTimer = minion.CSTimerThreshhold;
+            }
+        }
+
         if (targetHealth <= 0 && (gameObject.CompareTag("BlueMinion") || gameObject.CompareTag("RedMinion")))
         {
+            if (GetComponent<MinionScript>())
+            {
+                if (GetComponent<MinionScript>().targetSwitchTimer > 0)
+                {
+                    PlayerScript playerScr = GameObject.FindGameObjectWithTag(GetComponent<MinionScript>().enemyPlayerTag).GetComponent<PlayerScript>();
+                    playerScr.creepScore++;
+                }
+            }
+
             Destroy(gameObject);
         }
         else

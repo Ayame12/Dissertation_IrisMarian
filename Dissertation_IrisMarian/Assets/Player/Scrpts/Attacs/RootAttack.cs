@@ -99,7 +99,7 @@ public class RootAttack : Ability
                 {
                     if (collider.gameObject.GetComponent<Stats>())
                     {
-                        collider.gameObject.GetComponent<Stats>().takeDamage(damage);
+                        collider.gameObject.GetComponent<Stats>().takeDamage(damage,1);
                         collider.gameObject.GetComponent<Stats>().applyStun(rootDuration);
 
                         alreadyHitTargets[0] = collider.gameObject;
